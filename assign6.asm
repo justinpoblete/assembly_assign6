@@ -49,7 +49,7 @@ push qword 0
 
 ;welcome message to the viewer.
 mov rax, 0
-mov rdi, welcome               
+mov rdi, welcome
 call printf
 
 
@@ -84,8 +84,8 @@ call printf
 
 
 ;sum arithmetic           ********************* TODO**********************
-mov r12, 1
-mov rbx, 0x0000000000000000
+mov r12, 1                              ;counter at 1
+mov rbx, 0x0000000000000000             ;sum holder xmm13 at 0
 push rbx
 movsd xmm13, [rsp]
 pop rax
@@ -93,12 +93,12 @@ pop rax
 mov rax, r15
 mov rbx, 10
 div rbx
-mov r13, rax    ;get mod
+mov r13, rax                            ;get mod
 inc r15
 cdqe
-cmp r15, 10
+cmp r15, 11                             ;if less than 10 then dont print out terms
 jl onlycalc
-jmp pass2
+jmp pass2                               ;else pass2 to regular loop
 onlycalc:
 loopless:
 mov rbx, 0x3FF0000000000000
@@ -118,7 +118,7 @@ jmp loopless
 pass2:
 
 
-jmp pass
+jmp pass                              ;pass through first print
 ;print sum of iteration
 psum:
 mov r9, r12
@@ -147,7 +147,7 @@ inc r12
 
 cdqe
 cmp r12, r15
-jge end
+jge end                   ;if counter reaches input num then end
 mov r9, 0
 mov rax, r12
 mov rbx, r13
@@ -155,7 +155,7 @@ cqo
 idiv rbx
 mov r9, rdx
 cdqe
-cmp r9, 1
+cmp r9, 1                 ;if mod is equal to 1 then print term
 je psum
 jmp loop
 
@@ -163,7 +163,7 @@ end:
 
 dec r15
 mov qword rax, 0
-mov rdi, printsum1
+mov rdi, printsum1        ;call print for last term, b/c counter starts at 1
 mov rsi, r15
 call printf
 push qword 99
@@ -173,7 +173,7 @@ movsd xmm0, xmm13
 call printf
 pop rax
 
-end2:
+end2:                     ;pass the last print, not needed for harmonic sum less than 10
 
 push qword 99
 mov rax, 1
@@ -210,7 +210,7 @@ call printf
 
 ;show seconds
 cvtsi2sd xmm15, r14
-mov rbx, 0x41E4DC9380000000
+mov rbx, 0x41E4DC9380000000       ;find X.XGHz = XX eight zeroes
 push rbx
 divsd xmm15, [rsp]
 pop rax
